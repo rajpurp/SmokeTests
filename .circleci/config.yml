@@ -1,26 +1,26 @@
 version: 2.1
-
 jobs:
   configure_infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: 'python:3.7-alpine3.11'
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["dc:b4:22:71:c1:a9:ee:d3:4c:0a:9b:90:17:a4:c6:7a"] 
+          fingerprints:
+            - 'dc:b4:22:71:c1:a9:ee:d3:4c:0a:9b:90:17:a4:c6:7a'
       - run:
           name: Install dependencies
-          command: |
-            apk add --update ansible # install the dependencies needed for your playbook.
+          command: >
+            apk add --update ansible # install the dependencies needed for your
+            playbook.
       - run:
           name: Configure server
           working_directory: ./.circleci
           command: |
             ansible-playbook -i inventory.txt main.yml
-
   smoke_test:
     docker:
-      - image: alpine:latest
+      - image: 'alpine:latest'
     steps:
       - run: apk add --update curl
       - run:
@@ -32,12 +32,11 @@ jobs:
              return 0
             else
              return 1
-            fi
-
+                       fi
 workflows:
   my_workflow:
     jobs:
       - configure_infrastructure
-      - smoke_test:
+      - smoke_test: null
         requires:
           - configure_infrastructure
