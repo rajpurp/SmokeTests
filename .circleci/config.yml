@@ -1,31 +1,34 @@
-version: 2.1
-
-jobs:
-  configure_infrastructure:
-    docker:
-      - image: python:3.7-alpine3.11
-    steps:
+--- 
+jobs: 
+  configure_infrastructure: 
+    docker: 
+      - 
+        image: "python:3.7-alpine3.11"
+    steps: 
       - checkout
-      - add_ssh_keys:
-          fingerprints: ["dc:b4:22:71:c1:a9:ee:d3:4c:0a:9b:90:17:a4:c6:7a"] 
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --update ansible # install the dependencies needed for your playbook.
-      - run:
-          name: Configure server
+      - 
+        add_ssh_keys: 
+          fingerprints: 
+            - "dc:b4:22:71:c1:a9:ee:d3:4c:0a:9b:90:17:a4:c6:7a"
+      - 
+        run: 
+          command: "apk add --update ansible # install the dependencies needed for your playbook.\n"
+          name: "Install dependencies"
+      - 
+        run: 
+          command: "ansible-playbook -i inventory.txt main.yml\n"
+          name: "Configure server"
           working_directory: ./.circleci
+  smoke_test: 
+    docker: 
+      - 
+        image: "alpine:latest"
+    steps: 
+      - 
+        run: "apk add --update curl"
+      - 
+        run: 
           command: |
-            ansible-playbook -i inventory.txt main.yml
-            
-  smoke_test:
-      docker:
-        - image: alpine:latest
-      steps:
-        - run: apk add --update curl
-        - run:
-            name: smoke test.
-            command: |
               URL="https://blog.udacity.com/"
               if curl -s --head ${URL} # test if blog.udacity. com exists
               then
@@ -33,10 +36,12 @@ jobs:
               else
                return 1
               fi
-
-workflows:
-  my_workflow:
-    jobs:
-      - smoke_test:
-        requires:
+          name: "smoke test."
+version: 2.1
+workflows: 
+  my_workflow: 
+    jobs: 
+      - 
+        requires: 
           - configure_infrastructure
+        smoke_test: ~
