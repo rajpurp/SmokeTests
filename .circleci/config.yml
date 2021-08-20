@@ -19,19 +19,20 @@ jobs:
             ansible-playbook -i inventory.txt main.yml
 
   smoke_test:
-      docker:
-        - image: alpine:latest
-      steps:
-        - run: apk add --update curl
-        - run:
-            name: smoke test.
-            command: |
-              if curl -s --head https://www.udacity.com/
-              then
-               return 0
-              else
-               return 0
-              fi
+    docker:
+      - image: alpine:latest
+    steps:
+      - run: apk add --update curl
+      - run:
+          name: smoke test.
+          command: |
+            URL="https://blog.udacity.com/"
+            if curl -s --head ${URL} # test if blog.udacity. com exists
+            then
+             return 0
+            else
+             return 1
+            fi
 
 workflows:
   my_workflow:
