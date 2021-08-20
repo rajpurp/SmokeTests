@@ -18,24 +18,8 @@ jobs:
           working_directory: ./.circleci
           command: |
             ansible-playbook -i inventory.txt main.yml
-  smoke_test:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - run: apk add --update curl
-      - run:
-          name: smoke test.
-          command: |
-            if curl -s --head "https://google.com" 
-            then
-              echo "It worked!"
-            else
-              echo "It failed"
-            fi
+
 workflows:
   my_workflow:
     jobs:
       - configure_infrastructure
-      - smoke_test: null
-        requires:
-          - configure_infrastructure
