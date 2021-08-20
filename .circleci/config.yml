@@ -20,17 +20,17 @@ jobs:
             ansible-playbook -i inventory.txt main.yml
   smoke_test:
     docker:
-      - image: 'alpine:latest'
+      - image: amazon/aws-cli
     steps:
       - run: apk add --update curl
       - run:
           name: smoke test.
           command: |
-            if curl -s --head https://blog.udacity.com/
+            if curl -s --head "https://google.com" 
             then
-              echo "it worked"
+              echo "It worked!"
             else
-              echo "it failed"
+              echo "It failed"
             fi
 workflows:
   my_workflow:
