@@ -17,7 +17,7 @@ jobs:
           working_directory: ./.circleci
           command: |
             ansible-playbook -i inventory.txt main.yml
-            
+
   smoke_test:
       docker:
         - image: alpine:latest
@@ -31,7 +31,7 @@ jobs:
               then
                return 0
               else
-               return 0
+               return 1
               fi
 
 workflows:
