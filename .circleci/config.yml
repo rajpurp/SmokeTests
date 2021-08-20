@@ -38,5 +38,5 @@ workflows:
   my_workflow:
     jobs:
       - smoke_test:
-        - requires
+        requires:
           - configure_infrastructure
